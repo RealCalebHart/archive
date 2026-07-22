@@ -6,12 +6,14 @@ import { createServerSupabaseClient } from "./supabase";
 export async function toggleSavedEntry(
   entryId: string,
   slug: string,
-): Promise<{ ok: boolean }> {
+): Promise<{ ok: boolean; error?: string }> {
   const supabase = await createServerSupabaseClient();
-  if (!supabase) return { ok: false };
+  if (!supabase) return { ok: false, error: "Sign-in isn't available right now." };
 
   const { data: userData, error: userError } = await supabase.auth.getUser();
-  if (userError || !userData.user) return { ok: false };
+  if (userError || !userData.user) {
+    return { ok: false, error: "You need to be signed in to save entries." };
+  }
 
   const userId = userData.user.id;
 
@@ -24,7 +26,7 @@ export async function toggleSavedEntry(
 
   if (selectError) {
     console.error("Failed to check saved state:", selectError.message);
-    return { ok: false };
+    return { ok: false, error: selectError.message };
   }
 
   if (existing) {
@@ -34,7 +36,7 @@ export async function toggleSavedEntry(
       .eq("id", existing.id);
     if (error) {
       console.error("Failed to unsave entry:", error.message);
-      return { ok: false };
+      return { ok: false, error: error.message };
     }
   } else {
     const { error } = await supabase
@@ -42,7 +44,7 @@ export async function toggleSavedEntry(
       .insert({ user_id: userId, entry_id: entryId });
     if (error) {
       console.error("Failed to save entry:", error.message);
-      return { ok: false };
+      return { ok: false, error: error.message };
     }
   }
 

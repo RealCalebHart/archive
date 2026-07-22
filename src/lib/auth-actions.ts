@@ -1,14 +1,26 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "./supabase";
-import { safeNextPath } from "./auth";
+import { NEXT_REDIRECT_COOKIE, safeNextPath } from "./auth";
 
 // Matches next.config.ts's basePath — Next only applies basePath
 // automatically to Link/router navigation, not to absolute URLs we
 // build ourselves (see Nav.tsx's hardcoded "/archive/..." image src).
 const CALLBACK_PATH = "/archive/auth/callback";
+
+async function rememberNext(next: string | null) {
+  if (!next) return;
+  const cookieStore = await cookies();
+  cookieStore.set(NEXT_REDIRECT_COOKIE, next, {
+    path: "/",
+    maxAge: 60 * 10,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+}
 
 export type MagicLinkState = {
   status: "idle" | "success" | "error";
@@ -44,6 +56,7 @@ export async function requestMagicLink(
 
   const origin = await getOrigin();
   const next = safeNextPath(String(formData.get("next") ?? ""));
+  await rememberNext(next);
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: { emailRedirectTo: callbackUrl(origin, next) },
@@ -66,6 +79,7 @@ export async function signInWithGoogle(formData: FormData) {
 
   const origin = await getOrigin();
   const next = safeNextPath(String(formData.get("next") ?? ""));
+  await rememberNext(next);
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: { redirectTo: callbackUrl(origin, next) },

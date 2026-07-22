@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toggleSavedEntry } from "@/lib/saved-actions";
 
 export default function SaveButton({
@@ -20,8 +20,15 @@ export default function SaveButton({
   onUnsave?: () => void;
 }) {
   const [saved, setSaved] = useState(initialSaved);
+  const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const className = `save-button save-button--${variant}`;
+
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(null), 4000);
+    return () => clearTimeout(timer);
+  }, [error]);
 
   if (!signedIn) {
     return (
@@ -40,24 +47,36 @@ export default function SaveButton({
   return (
     <button
       type="button"
-      className={`${className}${saved ? " is-saved" : ""}`}
+      className={`${className}${saved ? " is-saved" : ""}${error ? " is-error" : ""}`}
       aria-label={saved ? "Remove from saved entries" : "Save entry"}
       aria-pressed={saved}
+      title={error ?? undefined}
       disabled={isPending}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        setError(null);
         const previous = saved;
         const next = !previous;
         setSaved(next);
         if (!next) onUnsave?.();
         startTransition(async () => {
           const result = await toggleSavedEntry(entryId, slug);
-          if (!result.ok) setSaved(previous);
+          if (!result.ok) {
+            setSaved(previous);
+            const message = result.error ?? "Couldn't save. Try again.";
+            console.error("Save failed:", message);
+            setError(message);
+          }
         });
       }}
     >
       <BookmarkIcon filled={saved} />
+      {error && (
+        <span role="alert" className="save-button-error">
+          {error}
+        </span>
+      )}
     </button>
   );
 }
