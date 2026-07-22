@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "./supabase";
+import { getSupabaseClient, createServerSupabaseClient } from "./supabase";
 import type { Comment, Entry } from "./types";
 
 // Fixed project start date used to compute "days running" on the homepage.
@@ -151,4 +151,63 @@ export async function getVisibleComments(entryId: string): Promise<Comment[]> {
     return [];
   }
   return (data as Comment[]) ?? [];
+}
+
+// saved_entries has no anon grants — only the authenticated role can read
+// or write it, so these always go through the session-aware server client.
+export async function isEntrySaved(
+  userId: string,
+  entryId: string,
+): Promise<boolean> {
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return false;
+
+  const { data, error } = await supabase
+    .from("saved_entries")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("entry_id", entryId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to check saved state:", error.message);
+    return false;
+  }
+  return Boolean(data);
+}
+
+export async function getSavedEntryIds(userId: string): Promise<Set<string>> {
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return new Set();
+
+  const { data, error } = await supabase
+    .from("saved_entries")
+    .select("entry_id")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("Failed to load saved entry ids:", error.message);
+    return new Set();
+  }
+  return new Set((data ?? []).map((row) => row.entry_id as string));
+}
+
+export async function getSavedEntries(userId: string): Promise<Entry[]> {
+  const supabase = await createServerSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("saved_entries")
+    .select("created_at, entries!inner(*)")
+    .eq("user_id", userId)
+    .not("entries.published_at", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to load saved entries:", error.message);
+    return [];
+  }
+  return (data ?? []).map(
+    (row) => row.entries as unknown as Entry,
+  );
 }

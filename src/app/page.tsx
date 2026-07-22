@@ -1,24 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
+import EntryCard from "./EntryCard";
 import {
   HOMEPAGE_VIDEO_URL,
   getCategories,
   getPublishedEntries,
+  getSavedEntryIds,
   getStats,
 } from "@/lib/queries";
+import { getSessionUser } from "@/lib/auth";
 import { youtubeEmbedUrl } from "@/lib/youtube";
-import { formatDate, formatEntryNumber } from "@/lib/format";
-import type { Entry } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [entries, stats, categories] = await Promise.all([
+  const [entries, stats, categories, user] = await Promise.all([
     getPublishedEntries(),
     getStats(),
     getCategories(),
+    getSessionUser(),
   ]);
+  const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
 
   const heroEmbedUrl = youtubeEmbedUrl(HOMEPAGE_VIDEO_URL);
 
@@ -79,20 +82,13 @@ export default async function HomePage() {
           </div>
         ) : (
           <div className="entry-scroll">
-            {entries.map((entry: Entry) => (
-              <Link
+            {entries.map((entry) => (
+              <EntryCard
                 key={entry.id}
-                href={`/${entry.slug}`}
-                className="entry-card"
-              >
-                <div className="row-meta">
-                  {entry.entry_number != null && (
-                    <span>No. {formatEntryNumber(entry.entry_number)}</span>
-                  )}
-                  <span>{formatDate(entry.published_at)}</span>
-                </div>
-                <h3>{entry.title}</h3>
-              </Link>
+                entry={entry}
+                signedIn={Boolean(user)}
+                saved={savedIds.has(entry.id)}
+              />
             ))}
           </div>
         )}

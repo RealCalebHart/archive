@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSupabaseClient } from "./supabase";
+import { createServerSupabaseClient } from "./supabase";
+import { displayNameFor } from "./auth";
 
 export type CommentFormState = {
   status: "idle" | "success" | "error";
@@ -14,14 +15,13 @@ export async function submitComment(
 ): Promise<CommentFormState> {
   const entryId = String(formData.get("entry_id") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim();
-  const name = String(formData.get("name") ?? "").trim();
   const comment = String(formData.get("comment") ?? "").trim();
 
-  if (!entryId || !name || !comment) {
-    return { status: "error", message: "Name and comment are required." };
+  if (!entryId || !comment) {
+    return { status: "error", message: "Comment text is required." };
   }
 
-  const supabase = getSupabaseClient();
+  const supabase = await createServerSupabaseClient();
   if (!supabase) {
     return {
       status: "error",
@@ -29,9 +29,17 @@ export async function submitComment(
     };
   }
 
-  const { error } = await supabase
-    .from("comments")
-    .insert({ entry_id: entryId, name, comment });
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError || !userData.user) {
+    return { status: "error", message: "Sign in to comment." };
+  }
+
+  const { error } = await supabase.from("comments").insert({
+    entry_id: entryId,
+    user_id: userData.user.id,
+    name: displayNameFor(userData.user),
+    comment,
+  });
 
   if (error) {
     console.error("Failed to submit comment:", error.message);

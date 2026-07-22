@@ -2,10 +2,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getEntryBySlug, getVisibleComments } from "@/lib/queries";
+import { getEntryBySlug, getVisibleComments, isEntrySaved } from "@/lib/queries";
+import { getSessionUser } from "@/lib/auth";
 import { youtubeEmbedUrl } from "@/lib/youtube";
 import { formatDate } from "@/lib/format";
 import CommentForm from "./CommentForm";
+import SaveButton from "@/app/SaveButton";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +22,8 @@ export default async function EntryPage({
   if (!entry) notFound();
 
   const comments = await getVisibleComments(entry.id);
+  const user = await getSessionUser();
+  const saved = user ? await isEntrySaved(user.id, entry.id) : false;
   const embedUrl = youtubeEmbedUrl(entry.youtube_url);
 
   return (
@@ -33,7 +37,16 @@ export default async function EntryPage({
           {entry.entry_number != null && <span>No. {entry.entry_number}</span>}
           {entry.published_at && <span>{formatDate(entry.published_at)}</span>}
         </div>
-        <h1 className="entry-title">{entry.title}</h1>
+        <div className="entry-title-row">
+          <h1 className="entry-title">{entry.title}</h1>
+          <SaveButton
+            entryId={entry.id}
+            slug={entry.slug}
+            signedIn={Boolean(user)}
+            initialSaved={saved}
+            variant="inline"
+          />
+        </div>
       </header>
 
       {embedUrl && (
@@ -96,7 +109,7 @@ export default async function EntryPage({
           ))
         )}
 
-        <CommentForm entryId={entry.id} slug={entry.slug} />
+        <CommentForm entryId={entry.id} slug={entry.slug} user={user} />
       </section>
     </main>
   );

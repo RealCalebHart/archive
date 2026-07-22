@@ -1,16 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState, useEffect, useRef } from "react";
 import { submitComment, type CommentFormState } from "@/lib/actions";
+import { signOut } from "@/lib/auth-actions";
+import type { SessionUser } from "@/lib/auth";
 
 const initialState: CommentFormState = { status: "idle" };
 
 export default function CommentForm({
   entryId,
   slug,
+  user,
 }: {
   entryId: string;
   slug: string;
+  user: SessionUser | null;
 }) {
   const [state, formAction, pending] = useActionState(
     submitComment,
@@ -24,15 +29,28 @@ export default function CommentForm({
     }
   }, [state]);
 
+  if (!user) {
+    return (
+      <p className="comment-signin-prompt">
+        <Link href={`/login?next=${encodeURIComponent(`/${slug}`)}`}>
+          Sign in
+        </Link>{" "}
+        to leave a comment.
+      </p>
+    );
+  }
+
   return (
     <form ref={formRef} action={formAction} className="comment-form">
       <input type="hidden" name="entry_id" value={entryId} />
       <input type="hidden" name="slug" value={slug} />
 
-      <label>
-        Name
-        <input type="text" name="name" required maxLength={80} />
-      </label>
+      <p className="comment-signed-in-as mono">
+        Posting as {user.displayName} ·{" "}
+        <button type="submit" name="sign_out" formAction={signOut} className="link-button">
+          Sign out
+        </button>
+      </p>
 
       <label>
         Comment

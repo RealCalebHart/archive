@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { getEntriesByCategory } from "@/lib/queries";
-import { formatDate, formatEntryNumber } from "@/lib/format";
+import EntryCard from "@/app/EntryCard";
+import { getEntriesByCategory, getSavedEntryIds } from "@/lib/queries";
+import { getSessionUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,11 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const entries = await getEntriesByCategory(category);
+  const [entries, user] = await Promise.all([
+    getEntriesByCategory(category),
+    getSessionUser(),
+  ]);
+  const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
 
   return (
     <main className="container">
@@ -33,15 +38,12 @@ export default async function CategoryPage({
       ) : (
         <div className="entry-grid">
           {entries.map((entry) => (
-            <Link key={entry.id} href={`/${entry.slug}`} className="entry-card">
-              <div className="row-meta">
-                {entry.entry_number != null && (
-                  <span>No. {formatEntryNumber(entry.entry_number)}</span>
-                )}
-                <span>{formatDate(entry.published_at)}</span>
-              </div>
-              <h3>{entry.title}</h3>
-            </Link>
+            <EntryCard
+              key={entry.id}
+              entry={entry}
+              signedIn={Boolean(user)}
+              saved={savedIds.has(entry.id)}
+            />
           ))}
         </div>
       )}
