@@ -140,7 +140,6 @@ hr {
   display: flex;
   gap: 1.5rem;
   flex: 1;
-  justify-content: center;
 }
 
 .nav-links a {
@@ -262,6 +261,7 @@ hr {
   }
 
   .nav-links {
+    justify-content: center;
     /* .nav-search is absolutely positioned off the flex flow at this
        breakpoint, so reserve its footprint (40px icon + 1.5rem inset)
        to keep centering scoped to logo↔icon, not logo↔nav edge. */
