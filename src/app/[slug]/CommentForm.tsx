@@ -47,7 +47,7 @@ export default function CommentForm({
 
       <p className="comment-signed-in-as mono">
         Posting as {user.displayName} ·{" "}
-        <button type="submit" name="sign_out" formAction={signOut} className="link-button">
+        <button type="submit" formAction={signOut} className="link-button">
           Sign out
         </button>
       </p>
