@@ -12,10 +12,10 @@ export type SyllabusSection = {
 // automatically from that, so you only ever declare the link once.
 export const SYLLABUS_SECTIONS: SyllabusSection[] = [
   {
-    slug: "example-section",
-    title: "Example Section — replace me",
+    slug: "start-here",
+    title: "Start Here",
     summary:
-      "Placeholder syllabus section. Edit src/lib/syllabus.ts to add your real courses and sections.",
+      "Learn how to use the Archive, where to find things, and start exploring our library.",
     body: "This is placeholder body content for a syllabus section. Replace it with real course material, notes, or links. You can reference other sections, entries, or the books page using normal markdown-style links.",
     relatedSlugs: ["another-example-section"],
   },

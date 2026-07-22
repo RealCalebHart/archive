@@ -29,6 +29,7 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const blurTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const otherIndex = useMemo<SearchItem[]>(() => {
     const syllabusItems: SearchItem[] = SYLLABUS_SECTIONS.map((section) => ({
@@ -109,8 +110,30 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
         <Link href="/syllabus">Syllabus</Link>
       </div>
 
-      <div className="nav-search">
+      <div className={`nav-search${open ? " is-open" : ""}`}>
+        <button
+          type="button"
+          className="nav-search-toggle"
+          aria-label="Open search"
+          onClick={() => inputRef.current?.focus()}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+
         <input
+          ref={inputRef}
           type="search"
           className="nav-search-input"
           placeholder="Search…"
