@@ -28,6 +28,16 @@ export type MagicLinkState = {
 };
 
 async function getOrigin(): Promise<string> {
+  // This app runs as its own Vercel project, reverse-proxied under
+  // calebhart.com/archive by a rewrite rule that lives in a different repo.
+  // Depending on how that proxy forwards headers, request/x-forwarded-*
+  // headers can reflect this project's own Vercel domain rather than
+  // calebhart.com — which would build an OAuth callback URL that never
+  // matches Supabase's Redirect URLs allow list. An explicit site URL sidesteps
+  // that entirely, so it takes priority when set.
+  const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (configuredSiteUrl) return configuredSiteUrl.replace(/\/+$/, "");
+
   const headerList = await headers();
   const origin = headerList.get("origin");
   if (origin) return origin;
