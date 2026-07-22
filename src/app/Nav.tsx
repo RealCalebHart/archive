@@ -144,7 +144,7 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
           }}
           onFocus={() => setOpen(true)}
           onBlur={() => {
-            blurTimeout.current = setTimeout(() => setOpen(false), 150);
+            blurTimeout.current = setTimeout(() => setOpen(false), 300);
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && results[0]) {
@@ -167,8 +167,7 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
                   key={item.kind + item.href + item.title}
                   type="button"
                   className="nav-search-result"
-                  onMouseDown={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     if (blurTimeout.current) clearTimeout(blurTimeout.current);
                     go(item.href);
                   }}

@@ -209,10 +209,11 @@ hr {
   width: 280px;
   max-height: 320px;
   overflow-y: auto;
-  background: var(--cell-fill);
-  border: 1px solid var(--cell-outline);
+  background: var(--charcoal);
+  border: 1px solid var(--line-strong);
   border-radius: var(--cell-radius);
   padding: 0.4rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
   z-index: 20;
 }
 
@@ -252,6 +253,12 @@ hr {
 @media (max-width: 640px) {
   .site-nav {
     position: relative;
+    /* isolate + explicit z-index guarantee the nav (and its search
+       results dropdown) forms one self-contained stacking context that
+       always paints above page content, even the doubled/transformed
+       brand-header image below it */
+    isolation: isolate;
+    z-index: 50;
   }
 
   .nav-links {
@@ -275,8 +282,10 @@ hr {
   }
 
   .nav-search.is-open {
-    width: 62vw;
-    max-width: 260px;
+    /* stretch left until ~15px past the logo's right edge:
+       100vw minus (logo's 1.5rem left inset + 28px logo width + 15px
+       gap + search's own 1.5rem right inset) */
+    width: calc(100vw - 3rem - 28px - 15px);
   }
 
   .nav-search-toggle {
