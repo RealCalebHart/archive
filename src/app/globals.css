@@ -140,6 +140,7 @@ hr {
   display: flex;
   gap: 1.5rem;
   flex: 1;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -253,10 +254,19 @@ hr {
     position: relative;
   }
 
+  .nav-links {
+    /* .nav-search is absolutely positioned off the flex flow at this
+       breakpoint, so reserve its footprint (40px icon + 1.5rem inset)
+       to keep centering scoped to logo↔icon, not logo↔nav edge. */
+    margin-right: calc(40px + 1.5rem);
+  }
+
   .nav-search {
     position: absolute;
-    top: 50%;
-    right: 0;
+    /* vertically centered on .nav-brand img (1.5rem padding-top + half its 28px height) */
+    top: calc(1.5rem + 14px);
+    /* matches .site-nav's own padding-right, mirroring the logo's left inset */
+    right: 1.5rem;
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
@@ -315,6 +325,10 @@ hr {
   max-width: var(--page-max);
   margin: 0 auto;
   padding: 4rem 1.5rem 6rem;
+}
+
+.container--home {
+  padding-top: 2rem;
 }
 
 .eyebrow {

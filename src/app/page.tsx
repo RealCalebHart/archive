@@ -23,7 +23,7 @@ export default async function HomePage() {
   const heroEmbedUrl = youtubeEmbedUrl(HOMEPAGE_VIDEO_URL);
 
   return (
-    <main className="container">
+    <main className="container container--home">
       <h1 className="brand-header">
         <Image
           src="/archive/archive-title.png"
