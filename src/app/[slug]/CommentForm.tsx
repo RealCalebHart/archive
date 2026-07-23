@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useActionState, useEffect, useRef } from "react";
 import { submitComment, type CommentFormState } from "@/lib/actions";
-import { signOut } from "@/lib/auth-actions";
 import type { SessionUser } from "@/lib/auth";
+import SignOutButton from "./SignOutButton";
 
 const initialState: CommentFormState = { status: "idle" };
 
@@ -46,10 +46,7 @@ export default function CommentForm({
       <input type="hidden" name="slug" value={slug} />
 
       <p className="comment-signed-in-as mono">
-        Posting as {user.displayName} ·{" "}
-        <button type="submit" formAction={signOut} className="link-button">
-          Sign out
-        </button>
+        Posting as {user.displayName} · <SignOutButton />
       </p>
 
       <label>

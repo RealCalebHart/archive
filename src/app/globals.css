@@ -945,6 +945,61 @@ hr {
   text-decoration: underline;
 }
 
+.confirm-dialog {
+  color: var(--parchment);
+  background: var(--cell-fill);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 320px;
+  font-family: var(--font-serif-stack);
+}
+
+.confirm-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.confirm-dialog p {
+  margin: 0 0 1.25rem;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.confirm-dialog-actions button {
+  font-family: var(--font-mono-stack);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.confirm-dialog-cancel {
+  color: var(--faint);
+  background: var(--charcoal);
+}
+
+.confirm-dialog-cancel:hover {
+  color: var(--parchment);
+}
+
+.confirm-dialog-confirm {
+  color: var(--parchment);
+  background: var(--rust);
+}
+
+.confirm-dialog-confirm:hover {
+  background: var(--rust);
+  opacity: 0.85;
+}
+
 .login-form {
   margin-top: 2rem;
   display: flex;
