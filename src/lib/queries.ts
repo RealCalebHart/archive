@@ -6,7 +6,7 @@ export const PROJECT_START_DATE = "2026-08-24";
 
 // Homepage hero video. Not part of the entries schema — paste a YouTube
 // URL here directly. Empty string shows an empty state.
-export const HOMEPAGE_VIDEO_URL = "";
+export const HOMEPAGE_VIDEO_URL = "https://youtu.be/DHa7vuhPScY";
 
 export type ArchiveStats = {
   entryCount: number;
