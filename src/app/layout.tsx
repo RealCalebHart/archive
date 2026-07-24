@@ -3,6 +3,7 @@ import { Crimson_Text } from "next/font/google";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import { getEntrySearchIndex } from "@/lib/queries";
+import { getSyllabusSearchIndex } from "@/lib/syllabus";
 import "./globals.css";
 
 const crimson = Crimson_Text({
@@ -23,12 +24,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const entries = await getEntrySearchIndex();
+  const [entries, syllabusSections] = await Promise.all([
+    getEntrySearchIndex(),
+    getSyllabusSearchIndex(),
+  ]);
 
   return (
     <html lang="en" className={crimson.variable}>
       <body>
-        <Nav entries={entries} />
+        <Nav entries={entries} syllabusSections={syllabusSections} />
         {children}
         <Footer />
       </body>

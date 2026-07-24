@@ -8,15 +8,17 @@ export default function EntryCard({
   signedIn,
   saved,
   onUnsave,
+  hrefQuery,
 }: {
   entry: Entry;
   signedIn: boolean;
   saved: boolean;
   onUnsave?: () => void;
+  hrefQuery?: string;
 }) {
   return (
     <div className="entry-card">
-      <Link href={`/${entry.slug}`} className="entry-card-link">
+      <Link href={`/${entry.slug}${hrefQuery ?? ""}`} className="entry-card-link">
         <div className="row-meta">
           {entry.entry_number != null && (
             <span>No. {formatEntryNumber(entry.entry_number)}</span>

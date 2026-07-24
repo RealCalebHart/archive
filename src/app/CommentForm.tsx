@@ -10,11 +10,13 @@ const initialState: CommentFormState = { status: "idle" };
 
 export default function CommentForm({
   entryId,
-  slug,
+  syllabusSectionId,
+  path,
   user,
 }: {
-  entryId: string;
-  slug: string;
+  entryId?: string;
+  syllabusSectionId?: string;
+  path: string;
   user: SessionUser | null;
 }) {
   const [state, formAction, pending] = useActionState(
@@ -32,7 +34,7 @@ export default function CommentForm({
   if (!user) {
     return (
       <p className="comment-signin-prompt">
-        <Link href={`/login?next=${encodeURIComponent(`/${slug}`)}`}>
+        <Link href={`/login?next=${encodeURIComponent(path)}`}>
           Sign in
         </Link>{" "}
         to leave a comment.
@@ -42,8 +44,15 @@ export default function CommentForm({
 
   return (
     <form ref={formRef} action={formAction} className="comment-form">
-      <input type="hidden" name="entry_id" value={entryId} />
-      <input type="hidden" name="slug" value={slug} />
+      {entryId && <input type="hidden" name="entry_id" value={entryId} />}
+      {syllabusSectionId && (
+        <input
+          type="hidden"
+          name="syllabus_section_id"
+          value={syllabusSectionId}
+        />
+      )}
+      <input type="hidden" name="path" value={path} />
 
       <p className="comment-signed-in-as mono">
         Posting as {user.displayName} · <SignOutButton />

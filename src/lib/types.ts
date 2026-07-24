@@ -14,7 +14,8 @@ export type Entry = {
 
 export type Comment = {
   id: string;
-  entry_id: string;
+  entry_id: string | null;
+  syllabus_section_id: string | null;
   user_id: string;
   name: string;
   comment: string;

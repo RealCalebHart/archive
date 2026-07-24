@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { BOOKS } from "@/lib/books";
-import { SYLLABUS_SECTIONS } from "@/lib/syllabus";
+import type { SyllabusSearchItem } from "@/lib/syllabus";
 import type { EntrySearchItem } from "@/lib/queries";
 
 type SearchItem = {
@@ -24,7 +24,13 @@ const STATIC_PAGES: SearchItem[] = [
   { title: "Terms of Use", href: "/terms-of-use", kind: "Page" },
 ];
 
-export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
+export default function Nav({
+  entries,
+  syllabusSections,
+}: {
+  entries: EntrySearchItem[];
+  syllabusSections: SyllabusSearchItem[];
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -32,7 +38,7 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const otherIndex = useMemo<SearchItem[]>(() => {
-    const syllabusItems: SearchItem[] = SYLLABUS_SECTIONS.map((section) => ({
+    const syllabusItems: SearchItem[] = syllabusSections.map((section) => ({
       title: section.title,
       href: `/syllabus/${section.slug}`,
       kind: "Syllabus",
@@ -43,7 +49,7 @@ export default function Nav({ entries }: { entries: EntrySearchItem[] }) {
       kind: "Book",
     }));
     return [...STATIC_PAGES, ...syllabusItems, ...bookItems];
-  }, []);
+  }, [syllabusSections]);
 
   const results = useMemo(() => {
     const raw = query.trim();

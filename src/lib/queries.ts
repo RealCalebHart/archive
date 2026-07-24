@@ -78,6 +78,37 @@ export async function getEntriesByCategory(category: string): Promise<Entry[]> {
   return (data as Entry[]) ?? [];
 }
 
+export type SidebarEntry = { slug: string; title: string };
+
+// Published entries grouped by category, for the syllabus sidebar (entries
+// associate with a top-level syllabus section via entries.category).
+export async function getPublishedEntriesByCategory(): Promise<
+  Map<string, SidebarEntry[]>
+> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return new Map();
+
+  const { data, error } = await supabase
+    .from("entries")
+    .select("slug, title, category")
+    .not("published_at", "is", null)
+    .not("category", "is", null)
+    .order("title", { ascending: true });
+
+  if (error) {
+    console.error("Failed to load entries by category:", error.message);
+    return new Map();
+  }
+
+  const map = new Map<string, SidebarEntry[]>();
+  for (const row of (data as (SidebarEntry & { category: string })[]) ?? []) {
+    const list = map.get(row.category) ?? [];
+    list.push({ slug: row.slug, title: row.title });
+    map.set(row.category, list);
+  }
+  return map;
+}
+
 export type EntrySearchItem = {
   slug: string;
   title: string;
@@ -148,6 +179,26 @@ export async function getVisibleComments(entryId: string): Promise<Comment[]> {
 
   if (error) {
     console.error("Failed to load comments:", error.message);
+    return [];
+  }
+  return (data as Comment[]) ?? [];
+}
+
+export async function getVisibleSyllabusComments(
+  sectionId: string,
+): Promise<Comment[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("comments")
+    .select("*")
+    .eq("syllabus_section_id", sectionId)
+    .eq("hidden", false)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Failed to load syllabus comments:", error.message);
     return [];
   }
   return (data as Comment[]) ?? [];

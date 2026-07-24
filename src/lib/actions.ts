@@ -13,11 +13,13 @@ export async function submitComment(
   _prev: CommentFormState,
   formData: FormData,
 ): Promise<CommentFormState> {
-  const entryId = String(formData.get("entry_id") ?? "").trim();
-  const slug = String(formData.get("slug") ?? "").trim();
+  const entryId = String(formData.get("entry_id") ?? "").trim() || null;
+  const syllabusSectionId =
+    String(formData.get("syllabus_section_id") ?? "").trim() || null;
+  const path = String(formData.get("path") ?? "").trim();
   const comment = String(formData.get("comment") ?? "").trim();
 
-  if (!entryId || !comment) {
+  if ((!entryId && !syllabusSectionId) || !comment) {
     return { status: "error", message: "Comment text is required." };
   }
 
@@ -36,6 +38,7 @@ export async function submitComment(
 
   const { error } = await supabase.from("comments").insert({
     entry_id: entryId,
+    syllabus_section_id: syllabusSectionId,
     user_id: userData.user.id,
     name: displayNameFor(userData.user),
     comment,
@@ -46,6 +49,6 @@ export async function submitComment(
     return { status: "error", message: "Something went wrong. Try again." };
   }
 
-  if (slug) revalidatePath(`/${slug}`);
+  if (path) revalidatePath(path);
   return { status: "success", message: "Comment posted." };
 }

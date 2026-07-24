@@ -6,18 +6,22 @@ import { getEntryBySlug, getVisibleComments, isEntrySaved } from "@/lib/queries"
 import { getSessionUser } from "@/lib/auth";
 import { youtubeVideoId } from "@/lib/youtube";
 import { formatDate } from "@/lib/format";
-import CommentForm from "./CommentForm";
+import CommentForm from "@/app/CommentForm";
 import SaveButton from "@/app/SaveButton";
 import VideoEmbed from "@/app/VideoEmbed";
+import SyllabusShell from "@/app/syllabus/SyllabusShell";
 
 export const dynamic = "force-dynamic";
 
 export default async function EntryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const { slug } = await params;
+  const { from } = await searchParams;
   const entry = await getEntryBySlug(slug);
 
   if (!entry) notFound();
@@ -26,9 +30,10 @@ export default async function EntryPage({
   const user = await getSessionUser();
   const saved = user ? await isEntrySaved(user.id, entry.id) : false;
   const videoId = youtubeVideoId(entry.youtube_url);
+  const path = from === "syllabus" ? `/${entry.slug}?from=syllabus` : `/${entry.slug}`;
 
-  return (
-    <main className="container">
+  const content = (
+    <>
       <Link href="/" className="back-link">
         ← The Archive
       </Link>
@@ -105,8 +110,14 @@ export default async function EntryPage({
           ))
         )}
 
-        <CommentForm entryId={entry.id} slug={entry.slug} user={user} />
+        <CommentForm entryId={entry.id} path={path} user={user} />
       </section>
-    </main>
+    </>
   );
+
+  if (from === "syllabus") {
+    return <SyllabusShell>{content}</SyllabusShell>;
+  }
+
+  return <main className="container">{content}</main>;
 }

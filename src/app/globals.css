@@ -1240,6 +1240,137 @@ hr {
   gap: 0.5rem;
 }
 
+.syllabus-subsections,
+.syllabus-entries {
+  margin-top: 3rem;
+}
+
+.syllabus-subsections h2,
+.syllabus-entries h2 {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 1rem;
+}
+
+/* ---------- Syllabus layout (sidebar + content) ---------- */
+.syllabus-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.syllabus-layout--no-sidebar {
+  grid-template-columns: 1fr;
+}
+
+.syllabus-content {
+  min-width: 0;
+}
+
+.syllabus-sidebar {
+  position: sticky;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.syllabus-nav-root {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.syllabus-nav-root:hover {
+  color: var(--sage);
+}
+
+.syllabus-nav-tree,
+.syllabus-nav-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.syllabus-nav-children {
+  margin-top: 0.15rem;
+}
+
+.syllabus-nav-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.syllabus-nav-toggle {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--faint);
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.syllabus-nav-toggle.is-open {
+  transform: rotate(90deg);
+}
+
+.syllabus-nav-toggle:hover {
+  color: var(--sage);
+}
+
+.syllabus-nav-toggle-spacer {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.syllabus-nav-link {
+  padding: 0.25rem 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.syllabus-nav-link:hover {
+  color: var(--parchment);
+  text-decoration: none;
+}
+
+.syllabus-nav-link.is-active {
+  color: var(--sage);
+}
+
+.syllabus-nav-link--entry {
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+
+.syllabus-nav-link--entry:hover {
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .syllabus-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .syllabus-sidebar {
+    position: static;
+  }
+}
+
 /* ---------- About (static content page) ---------- */
 .about-page {
   --font-heading-stack: var(--font-heading), "Space Grotesk", sans-serif;
