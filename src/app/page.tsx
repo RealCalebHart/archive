@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 import EntryCard from "./EntryCard";
+import VideoEmbed from "./VideoEmbed";
 import {
   HOMEPAGE_VIDEO_URL,
   getCategories,
@@ -10,7 +11,7 @@ import {
   getStats,
 } from "@/lib/queries";
 import { getSessionUser } from "@/lib/auth";
-import { youtubeEmbedUrl } from "@/lib/youtube";
+import { youtubeVideoId } from "@/lib/youtube";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export default async function HomePage() {
   ]);
   const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
 
-  const heroEmbedUrl = youtubeEmbedUrl(HOMEPAGE_VIDEO_URL);
+  const heroVideoId = youtubeVideoId(HOMEPAGE_VIDEO_URL);
 
   return (
     <main className="container container--home">
@@ -40,13 +41,8 @@ export default async function HomePage() {
 
       <div className="hero-row">
         <div className="hero-video">
-          {heroEmbedUrl ? (
-            <iframe
-              src={heroEmbedUrl}
-              title="The Archive"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+          {heroVideoId ? (
+            <VideoEmbed url={HOMEPAGE_VIDEO_URL} title="The Archive" />
           ) : (
             <div className="hero-video-empty mono">No video set</div>
           )}

@@ -4,10 +4,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getEntryBySlug, getVisibleComments, isEntrySaved } from "@/lib/queries";
 import { getSessionUser } from "@/lib/auth";
-import { youtubeEmbedUrl } from "@/lib/youtube";
+import { youtubeVideoId } from "@/lib/youtube";
 import { formatDate } from "@/lib/format";
 import CommentForm from "./CommentForm";
 import SaveButton from "@/app/SaveButton";
+import VideoEmbed from "@/app/VideoEmbed";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export default async function EntryPage({
   const comments = await getVisibleComments(entry.id);
   const user = await getSessionUser();
   const saved = user ? await isEntrySaved(user.id, entry.id) : false;
-  const embedUrl = youtubeEmbedUrl(entry.youtube_url);
+  const videoId = youtubeVideoId(entry.youtube_url);
 
   return (
     <main className="container">
@@ -49,14 +50,9 @@ export default async function EntryPage({
         </div>
       </header>
 
-      {embedUrl && (
+      {videoId && (
         <div className="video-wrap">
-          <iframe
-            src={embedUrl}
-            title={entry.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          />
+          <VideoEmbed url={entry.youtube_url} title={entry.title} />
         </div>
       )}
 
