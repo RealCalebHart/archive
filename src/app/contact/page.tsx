@@ -17,11 +17,16 @@ export default function ContactPage() {
 
       <div className="prose">
         <p>
-          Questions, feedback, or anything else — reach out at{" "}
-          <a href="mailto:contact@systeminfinity.llc">
-            contact@systeminfinity.llc
-          </a>
-          .
+          Questions, feedback, or anything else? DM me on{" "}
+          <a
+            href="https://www.instagram.com/calebthart/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>{" "}
+          or send me an email at{" "}
+          <a href="mailto:cth@calebhart.com">cth@calebhart.com</a>.
         </p>
       </div>
     </main>
