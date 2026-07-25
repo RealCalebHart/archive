@@ -31,6 +31,12 @@ export default function CommentForm({
     }
   }, [state]);
 
+  // Comments are disabled site-wide for now; code below is kept intact.
+  const commentsComingSoon = true;
+  if (commentsComingSoon) {
+    return <p className="comment-signin-prompt">Feature coming soon…</p>;
+  }
+
   if (!user) {
     return (
       <p className="comment-signin-prompt">

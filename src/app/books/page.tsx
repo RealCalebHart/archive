@@ -16,7 +16,12 @@ export default function BooksPage() {
         <h1 className="entry-title">Books</h1>
       </header>
 
-      {BOOKS.length === 0 ? (
+      {/* Books page is disabled for now; original rendering kept below. */}
+      {true ? (
+        <div className="empty">
+          <span className="mono">Feature coming soon…</span>
+        </div>
+      ) : BOOKS.length === 0 ? (
         <div className="empty">
           <span className="mono">No books yet</span>
           Recommended books will appear here.
