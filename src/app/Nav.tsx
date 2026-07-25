@@ -7,6 +7,7 @@ import { useMemo, useRef, useState } from "react";
 import { BOOKS } from "@/lib/books";
 import type { SyllabusSearchItem } from "@/lib/syllabus";
 import type { EntrySearchItem } from "@/lib/queries";
+import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/constants";
 
 type SearchItem = {
   title: string;
@@ -34,6 +35,7 @@ export default function Nav({
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const blurTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -110,10 +112,48 @@ export default function Nav({
         />
       </Link>
 
-      <div className="nav-links">
-        <Link href="/">Home</Link>
-        <Link href="/books">Books</Link>
-        <Link href="/syllabus">Syllabus</Link>
+      <button
+        type="button"
+        className={`nav-menu-toggle${menuOpen ? " is-open" : ""}`}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen((v) => !v)}
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      <div className={`nav-links${menuOpen ? " is-open" : ""}`}>
+        <div className="nav-links-inner">
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
+          <Link href="/books" onClick={() => setMenuOpen(false)}>
+            Books
+          </Link>
+          <Link href="/syllabus" onClick={() => setMenuOpen(false)}>
+            Syllabus
+          </Link>
+          <a
+            href={SUBSTACK_SUBSCRIBE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMenuOpen(false)}
+          >
+            Subscribe
+          </a>
+        </div>
       </div>
 
       <div className={`nav-search${open ? " is-open" : ""}`}>

@@ -10,6 +10,7 @@ import {
   getSavedEntryIds,
   getStats,
 } from "@/lib/queries";
+import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/constants";
 import { getSessionUser } from "@/lib/auth";
 import { youtubeVideoId } from "@/lib/youtube";
 
@@ -65,6 +66,54 @@ export default async function HomePage() {
               <span className="k">Days running</span>
             </div>
           </section>
+
+          <a
+            href={SUBSTACK_SUBSCRIBE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="newsletter-card"
+          >
+            <span className="newsletter-card-icon" aria-hidden="true">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+              </svg>
+            </span>
+
+            <span className="newsletter-card-text">
+              <span className="newsletter-card-title">
+                Subscribe to the Newsletter
+              </span>
+              <span className="newsletter-card-desc">
+                Get only the best lessons, condensed into one short email,
+                straight to your inbox.
+              </span>
+            </span>
+
+            <svg
+              className="newsletter-card-arrow"
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
         </div>
       </div>
 
