@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
-import { BOOKS } from "@/lib/books";
 import type { SyllabusSearchItem } from "@/lib/syllabus";
 import type { EntrySearchItem } from "@/lib/queries";
+import type { Book } from "@/lib/types";
 import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/constants";
 
 type SearchItem = {
@@ -28,9 +28,11 @@ const STATIC_PAGES: SearchItem[] = [
 export default function Nav({
   entries,
   syllabusSections,
+  books,
 }: {
   entries: EntrySearchItem[];
   syllabusSections: SyllabusSearchItem[];
+  books: Book[];
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -45,13 +47,13 @@ export default function Nav({
       href: `/syllabus/${section.slug}`,
       kind: "Syllabus",
     }));
-    const bookItems: SearchItem[] = BOOKS.map((book) => ({
+    const bookItems: SearchItem[] = books.map((book) => ({
       title: `${book.title} — ${book.author}`,
       href: "/books",
       kind: "Book",
     }));
     return [...STATIC_PAGES, ...syllabusItems, ...bookItems];
-  }, [syllabusSections]);
+  }, [syllabusSections, books]);
 
   const results = useMemo(() => {
     const raw = query.trim();

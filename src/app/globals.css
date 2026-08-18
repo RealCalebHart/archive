@@ -1262,37 +1262,55 @@ hr {
 /* ---------- Books ---------- */
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.85rem;
 }
 
 .book-card {
   background: var(--cell-fill);
   border: 1px solid var(--cell-outline);
   border-radius: var(--cell-radius);
-  padding: 1.5rem;
+  padding: 1rem;
+}
+
+.book-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  margin: 0 0 0.85rem;
+  border-radius: calc(var(--cell-radius) - 4px);
+  overflow: hidden;
+  background: var(--line);
+}
+
+.book-cover img {
+  object-fit: cover;
 }
 
 .book-card h3 {
   margin: 0 0 0.25rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.3;
 }
 
 .book-author {
-  color: var(--faint);
-  margin: 0 0 0.9rem;
+  font-family: var(--font-serif-stack);
+  font-style: italic;
+  color: var(--muted);
+  margin: 0 0 0.65rem;
+  font-size: 0.9rem;
 }
 
 .book-description {
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
 }
 
 .book-links {
   display: flex;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .book-links a {

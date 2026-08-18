@@ -12,6 +12,20 @@ export type Entry = {
   category: string | null;
 };
 
+export type Book = {
+  id: string;
+  slug: string;
+  title: string;
+  author: string;
+  description: string | null;
+  amazon_url: string | null;
+  bookshop_url: string | null;
+  image_url: string | null;
+  position: number | null;
+  published_at: string | null;
+  created_at: string;
+};
+
 export type Comment = {
   id: string;
   entry_id: string | null;

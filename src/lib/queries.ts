@@ -1,5 +1,5 @@
 import { getSupabaseClient, createServerSupabaseClient } from "./supabase";
-import type { Comment, Entry } from "./types";
+import type { Book, Comment, Entry } from "./types";
 
 // Fixed project start date used to compute "days running" on the homepage.
 export const PROJECT_START_DATE = "2026-08-24";
@@ -164,6 +164,31 @@ export async function getStats(): Promise<ArchiveStats> {
     sourceCount,
     daysRunning,
   };
+}
+
+export async function getBooks(): Promise<Book[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("books")
+    .select("*")
+    .not("published_at", "is", null)
+    .order("position", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Failed to load books:", error.message);
+    return [];
+  }
+
+  // The upload tool has stored some cover URLs with an extra "/rest/v1"
+  // segment ahead of "/storage/...", which 401s. Strip it so covers load
+  // regardless of whether that gets fixed upstream.
+  return ((data as Book[]) ?? []).map((book) => ({
+    ...book,
+    image_url: book.image_url?.replace("/rest/v1/storage/", "/storage/") ?? null,
+  }));
 }
 
 export async function getVisibleComments(entryId: string): Promise<Comment[]> {

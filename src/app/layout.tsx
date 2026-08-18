@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Crimson_Text } from "next/font/google";
 import Footer from "./Footer";
 import Nav from "./Nav";
-import { getEntrySearchIndex } from "@/lib/queries";
+import { getBooks, getEntrySearchIndex } from "@/lib/queries";
 import { getSyllabusSearchIndex } from "@/lib/syllabus";
 import "./globals.css";
 
@@ -24,15 +24,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [entries, syllabusSections] = await Promise.all([
+  const [entries, syllabusSections, books] = await Promise.all([
     getEntrySearchIndex(),
     getSyllabusSearchIndex(),
+    getBooks(),
   ]);
 
   return (
     <html lang="en" className={crimson.variable}>
       <body>
-        <Nav entries={entries} syllabusSections={syllabusSections} />
+        <Nav entries={entries} syllabusSections={syllabusSections} books={books} />
         {children}
         <Footer />
       </body>
