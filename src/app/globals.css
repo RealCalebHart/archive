@@ -402,7 +402,11 @@ hr {
 
 @media (max-width: 640px) {
   .container {
-    padding-top: 2rem;
+    padding-top: 1rem;
+  }
+
+  .container--home {
+    padding-top: 1rem;
   }
 }
 
@@ -1579,7 +1583,7 @@ hr {
 
 @media (max-width: 640px) {
   .about-container {
-    padding-top: 2rem;
+    padding-top: 1rem;
   }
 }
 
