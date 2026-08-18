@@ -400,6 +400,12 @@ hr {
   padding-top: 2rem;
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding-top: 2rem;
+  }
+}
+
 .eyebrow {
   font-family: var(--font-mono-stack);
   font-size: 0.72rem;
@@ -1569,6 +1575,12 @@ hr {
   max-width: 640px;
   margin: 0 auto;
   padding: 4rem 1.5rem 6rem;
+}
+
+@media (max-width: 640px) {
+  .about-container {
+    padding-top: 2rem;
+  }
 }
 
 .about-header {
