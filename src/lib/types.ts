@@ -7,6 +7,7 @@ export type Entry = {
   youtube_url: string | null;
   pdf_url: string | null;
   sources: string[] | null;
+  book_ids: string[] | null;
   published_at: string | null;
   created_at: string;
   category: string | null;
@@ -18,6 +19,8 @@ export type Book = {
   title: string;
   author: string;
   description: string | null;
+  long_description: string | null;
+  takeaways: string | null;
   amazon_url: string | null;
   bookshop_url: string | null;
   image_url: string | null;

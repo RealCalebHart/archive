@@ -1,8 +1,14 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getEntryBySlug, getVisibleComments, isEntrySaved } from "@/lib/queries";
+import {
+  getBooksByIds,
+  getEntryBySlug,
+  getVisibleComments,
+  isEntrySaved,
+} from "@/lib/queries";
 import { getSessionUser } from "@/lib/auth";
 import { youtubeVideoId } from "@/lib/youtube";
 import { formatDate } from "@/lib/format";
@@ -27,6 +33,9 @@ export default async function EntryPage({
   if (!entry) notFound();
 
   const comments = await getVisibleComments(entry.id);
+  const sourceBooks = entry.book_ids?.length
+    ? await getBooksByIds(entry.book_ids)
+    : [];
   const user = await getSessionUser();
   const saved = user ? await isEntrySaved(user.id, entry.id) : false;
   const videoId = youtubeVideoId(entry.youtube_url);
@@ -80,14 +89,45 @@ export default async function EntryPage({
         </div>
       )}
 
-      {entry.sources && entry.sources.length > 0 && (
+      {(sourceBooks.length > 0 || (entry.sources && entry.sources.length > 0)) && (
         <section className="sources">
           <h2 className="mono">Sources</h2>
-          <ol>
-            {entry.sources.map((source, i) => (
-              <li key={i}>{source}</li>
-            ))}
-          </ol>
+
+          {sourceBooks.length > 0 && (
+            <div className="source-books">
+              {sourceBooks.map((book) => (
+                <Link
+                  key={book.id}
+                  href={`/library/${book.slug}`}
+                  className="source-book-card"
+                >
+                  {book.image_url && (
+                    <div className="source-book-cover">
+                      <Image
+                        src={book.image_url}
+                        alt={`Cover of ${book.title}`}
+                        fill
+                        unoptimized
+                        sizes="72px"
+                      />
+                    </div>
+                  )}
+                  <span className="source-book-title">
+                    {book.title}
+                    <span className="source-book-author">{book.author}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {entry.sources && entry.sources.length > 0 && (
+            <ol>
+              {entry.sources.map((source, i) => (
+                <li key={i}>{source}</li>
+              ))}
+            </ol>
+          )}
         </section>
       )}
 

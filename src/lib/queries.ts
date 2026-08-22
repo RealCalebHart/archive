@@ -166,6 +166,16 @@ export async function getStats(): Promise<ArchiveStats> {
   };
 }
 
+// The upload tool has stored some cover URLs with an extra "/rest/v1"
+// segment ahead of "/storage/...", which 401s. Strip it so covers load
+// regardless of whether that gets fixed upstream.
+function fixBookImageUrl(book: Book): Book {
+  return {
+    ...book,
+    image_url: book.image_url?.replace("/rest/v1/storage/", "/storage/") ?? null,
+  };
+}
+
 export async function getBooks(): Promise<Book[]> {
   const supabase = getSupabaseClient();
   if (!supabase) return [];
@@ -182,13 +192,68 @@ export async function getBooks(): Promise<Book[]> {
     return [];
   }
 
-  // The upload tool has stored some cover URLs with an extra "/rest/v1"
-  // segment ahead of "/storage/...", which 401s. Strip it so covers load
-  // regardless of whether that gets fixed upstream.
-  return ((data as Book[]) ?? []).map((book) => ({
-    ...book,
-    image_url: book.image_url?.replace("/rest/v1/storage/", "/storage/") ?? null,
-  }));
+  return ((data as Book[]) ?? []).map(fixBookImageUrl);
+}
+
+export async function getBookBySlug(slug: string): Promise<Book | null> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("books")
+    .select("*")
+    .eq("slug", slug)
+    .not("published_at", "is", null)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to load book:", error.message);
+    return null;
+  }
+  return data ? fixBookImageUrl(data as Book) : null;
+}
+
+// Books referenced by an entry, in the order given by entry.book_ids.
+export async function getBooksByIds(ids: string[]): Promise<Book[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase || ids.length === 0) return [];
+
+  const { data, error } = await supabase
+    .from("books")
+    .select("*")
+    .in("id", ids)
+    .not("published_at", "is", null);
+
+  if (error) {
+    console.error("Failed to load books by id:", error.message);
+    return [];
+  }
+
+  const bySlugOrder = new Map(
+    ((data as Book[]) ?? []).map((book) => [book.id, fixBookImageUrl(book)]),
+  );
+  return ids
+    .map((id) => bySlugOrder.get(id))
+    .filter((book): book is Book => Boolean(book));
+}
+
+// Published entries that cite a given book, for the book page's "Found in" section.
+export async function getEntriesReferencingBook(bookId: string): Promise<Entry[]> {
+  const supabase = getSupabaseClient();
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("entries")
+    .select("*")
+    .contains("book_ids", [bookId])
+    .not("published_at", "is", null)
+    .order("published_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to load entries referencing book:", error.message);
+    return [];
+  }
+  return (data as Entry[]) ?? [];
 }
 
 export async function getVisibleComments(entryId: string): Promise<Comment[]> {

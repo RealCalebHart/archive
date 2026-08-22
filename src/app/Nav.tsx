@@ -17,7 +17,7 @@ type SearchItem = {
 
 const STATIC_PAGES: SearchItem[] = [
   { title: "Home", href: "/", kind: "Page" },
-  { title: "Books", href: "/books", kind: "Page" },
+  { title: "Library", href: "/library", kind: "Page" },
   { title: "Syllabus", href: "/syllabus", kind: "Page" },
   { title: "Contact", href: "/contact", kind: "Page" },
   { title: "Disclaimer", href: "/disclaimer", kind: "Page" },
@@ -49,7 +49,7 @@ export default function Nav({
     }));
     const bookItems: SearchItem[] = books.map((book) => ({
       title: `${book.title} — ${book.author}`,
-      href: "/books",
+      href: `/library/${book.slug}`,
       kind: "Book",
     }));
     return [...STATIC_PAGES, ...syllabusItems, ...bookItems];
@@ -141,8 +141,8 @@ export default function Nav({
           <Link href="/" onClick={() => setMenuOpen(false)}>
             Home
           </Link>
-          <Link href="/books" onClick={() => setMenuOpen(false)}>
-            Books
+          <Link href="/library" onClick={() => setMenuOpen(false)}>
+            Library
           </Link>
           <Link href="/syllabus" onClick={() => setMenuOpen(false)}>
             Syllabus
