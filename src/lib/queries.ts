@@ -37,29 +37,6 @@ export async function getPublishedEntries(): Promise<Entry[]> {
   return (data as Entry[]) ?? [];
 }
 
-export async function getCategories(): Promise<string[]> {
-  const supabase = getSupabaseClient();
-  if (!supabase) return [];
-
-  const { data, error } = await supabase
-    .from("entries")
-    .select("category")
-    .not("published_at", "is", null)
-    .not("category", "is", null);
-
-  if (error) {
-    console.error("Failed to load categories:", error.message);
-    return [];
-  }
-
-  const categories = new Set(
-    (data ?? [])
-      .map((row) => (row as { category: string | null }).category)
-      .filter((category): category is string => Boolean(category)),
-  );
-  return Array.from(categories).sort((a, b) => a.localeCompare(b));
-}
-
 export async function getEntriesByCategory(category: string): Promise<Entry[]> {
   const supabase = getSupabaseClient();
   if (!supabase) return [];

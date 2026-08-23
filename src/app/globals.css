@@ -755,6 +755,14 @@ hr {
   text-decoration: none;
 }
 
+.category-pill--empty {
+  opacity: 0.45;
+}
+
+.category-pill--empty:hover {
+  opacity: 0.7;
+}
+
 /* ---------- Empty state ---------- */
 .empty {
   border: 1px dashed var(--line-strong);

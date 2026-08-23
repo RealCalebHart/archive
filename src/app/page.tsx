@@ -5,11 +5,11 @@ import EntryCard from "./EntryCard";
 import VideoEmbed from "./VideoEmbed";
 import {
   HOMEPAGE_VIDEO_URL,
-  getCategories,
   getPublishedEntries,
   getSavedEntryIds,
   getStats,
 } from "@/lib/queries";
+import { getCategoryPills } from "@/lib/syllabus";
 import { SUBSTACK_SUBSCRIBE_URL } from "@/lib/constants";
 import { getSessionUser } from "@/lib/auth";
 import { youtubeVideoId } from "@/lib/youtube";
@@ -20,7 +20,7 @@ export default async function HomePage() {
   const [entries, stats, categories, user] = await Promise.all([
     getPublishedEntries(),
     getStats(),
-    getCategories(),
+    getCategoryPills(),
     getSessionUser(),
   ]);
   const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
@@ -145,17 +145,21 @@ export default async function HomePage() {
         {categories.length === 0 ? (
           <div className="empty">
             <span className="mono">No categories yet</span>
-            Categories will appear here once entries are tagged.
+            Categories will appear here once the syllabus is set up.
           </div>
         ) : (
           <div className="category-pills">
             {categories.map((category) => (
               <Link
-                key={category}
-                href={`/category/${encodeURIComponent(category)}`}
-                className="category-pill"
+                key={category.slug}
+                href={`/category/${encodeURIComponent(category.slug)}`}
+                className={
+                  category.entryCount === 0
+                    ? "category-pill category-pill--empty"
+                    : "category-pill"
+                }
               >
-                {category}
+                {category.title}
               </Link>
             ))}
           </div>

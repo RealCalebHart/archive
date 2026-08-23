@@ -1,6 +1,7 @@
 import Link from "next/link";
 import EntryCard from "@/app/EntryCard";
 import { getEntriesByCategory, getSavedEntryIds } from "@/lib/queries";
+import { findSyllabusSection, getSyllabusSections } from "@/lib/syllabus";
 import { getSessionUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -11,11 +12,14 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const [entries, user] = await Promise.all([
+  const [entries, sections, user] = await Promise.all([
     getEntriesByCategory(category),
+    getSyllabusSections(),
     getSessionUser(),
   ]);
   const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
+  const section = findSyllabusSection(sections, category);
+  const title = section?.title ?? category;
 
   return (
     <main className="container">
@@ -27,7 +31,7 @@ export default async function CategoryPage({
         <div className="row-meta mono">
           <span>Category</span>
         </div>
-        <h1 className="entry-title">{category}</h1>
+        <h1 className="entry-title">{title}</h1>
       </header>
 
       {entries.length === 0 ? (

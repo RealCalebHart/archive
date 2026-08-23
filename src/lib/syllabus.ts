@@ -152,6 +152,31 @@ export type SyllabusSidebarData = {
   entriesByTopLevelSlug: Record<string, SidebarEntry[]>;
 };
 
+export type CategoryPill = {
+  slug: string;
+  title: string;
+  entryCount: number;
+};
+
+// Top-level syllabus sections double as the homepage's category list, so
+// every category button exists regardless of whether any entry has been
+// tagged under it yet.
+export async function getCategoryPills(): Promise<CategoryPill[]> {
+  const [sections, entriesByCategory] = await Promise.all([
+    getSyllabusSections(),
+    getPublishedEntriesByCategory(),
+  ]);
+
+  return sections
+    .filter((section) => section.parent_id === null)
+    .sort((a, b) => a.position - b.position)
+    .map((section) => ({
+      slug: section.slug,
+      title: section.title,
+      entryCount: entriesByCategory.get(section.slug)?.length ?? 0,
+    }));
+}
+
 // Shared by the /syllabus layout and any other page (e.g. an entry page)
 // that wants to keep the syllabus sidebar visible.
 export async function getSyllabusSidebarData(): Promise<SyllabusSidebarData> {
