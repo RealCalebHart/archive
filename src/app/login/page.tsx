@@ -26,12 +26,7 @@ export default async function LoginPage({
         <h1 className="entry-title">Sign in</h1>
       </header>
 
-      {/* Site sign-up/sign-in is disabled for now; LoginForm kept intact below. */}
-      {true ? (
-        <p className="form-note">Feature coming soon…</p>
-      ) : (
-        <LoginForm next={next} />
-      )}
+      <LoginForm next={next} />
     </main>
   );
 }
