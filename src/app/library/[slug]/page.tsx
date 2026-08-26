@@ -68,6 +68,11 @@ export default async function BookPage({
                 Bookshop.org
               </a>
             )}
+            {book.custom_links?.map((link) => (
+              <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+                {link.name}
+              </a>
+            ))}
           </div>
 
           {book.description && <p className="book-description">{book.description}</p>}

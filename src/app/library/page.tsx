@@ -57,6 +57,11 @@ export default async function LibraryPage() {
                     Bookshop.org
                   </a>
                 )}
+                {book.custom_links?.map((link) => (
+                  <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.name}
+                  </a>
+                ))}
               </div>
             </div>
           ))}

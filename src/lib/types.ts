@@ -23,6 +23,7 @@ export type Book = {
   takeaways: string | null;
   amazon_url: string | null;
   bookshop_url: string | null;
+  custom_links: { name: string; url: string }[] | null;
   image_url: string | null;
   position: number | null;
   published_at: string | null;
