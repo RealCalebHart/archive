@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getBookBySlug, getEntriesReferencingBook } from "@/lib/queries";
-import { formatDate } from "@/lib/format";
+import { formatDate, externalUrl } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +69,7 @@ export default async function BookPage({
               </a>
             )}
             {book.custom_links?.map((link) => (
-              <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+              <a key={link.url} href={externalUrl(link.url)} target="_blank" rel="noopener noreferrer">
                 {link.name}
               </a>
             ))}

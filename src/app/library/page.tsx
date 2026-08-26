@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getBooks } from "@/lib/queries";
+import { externalUrl } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +59,7 @@ export default async function LibraryPage() {
                   </a>
                 )}
                 {book.custom_links?.map((link) => (
-                  <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
+                  <a key={link.url} href={externalUrl(link.url)} target="_blank" rel="noopener noreferrer">
                     {link.name}
                   </a>
                 ))}
