@@ -822,6 +822,194 @@ hr {
   margin: 0.5rem 0 0;
 }
 
+/* ---------- Entry hero (title/CTAs + video/social) ---------- */
+.entry-hero {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 2.5rem;
+  align-items: start;
+  margin: 2rem 0 3rem;
+}
+
+.entry-hero-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.entry-hero-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.entry-hero-date {
+  color: var(--faint);
+}
+
+.entry-hero-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.entry-hero-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.entry-hero-quote {
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+}
+
+.entry-hero-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.entry-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--cell-fill);
+  border: 1px solid var(--cell-outline);
+  border-radius: var(--cell-radius);
+  padding: 0.85rem 0.85rem 0.85rem 1.25rem;
+}
+
+.entry-cta-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.entry-cta-button {
+  font-family: var(--font-mono-stack);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.65rem 1.2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.entry-cta-button--primary {
+  background: var(--grove);
+  color: var(--parchment);
+}
+
+.entry-cta-button--primary:hover {
+  background: var(--sage);
+  text-decoration: none;
+}
+
+.entry-cta-button--ghost {
+  background: var(--charcoal);
+  color: var(--parchment);
+  border-color: var(--line-strong);
+}
+
+.entry-cta-button--ghost:hover {
+  border-color: var(--sage);
+  color: var(--sage);
+}
+
+.entry-hero-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.entry-video-frame {
+  background: var(--charcoal);
+  border: 1px solid var(--cell-outline);
+  border-radius: 16px;
+  padding: 0.6rem;
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.65);
+}
+
+.entry-video-frame .video-wrap {
+  margin: 0;
+  border-radius: 10px;
+}
+
+.entry-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: var(--cell-fill);
+  border: 1px solid var(--cell-outline);
+  border-radius: var(--cell-radius);
+  padding: 0.75rem 1rem;
+}
+
+.entry-social-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.entry-social-icons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.entry-social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 8px;
+  background: var(--grove);
+  color: var(--parchment);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.entry-social-icon:hover {
+  background: var(--sage);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+@media (max-width: 760px) {
+  .entry-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .entry-cta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .entry-cta-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 .video-wrap {
   position: relative;
   width: 100%;
@@ -912,28 +1100,6 @@ hr {
   padding-left: 1.25rem;
   color: var(--muted);
   font-style: italic;
-}
-
-.pdf-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono-stack);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--parchment);
-  background: var(--grove);
-  border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 0.7rem 1.1rem;
-  margin: 2rem 0;
-  transition: background 0.15s ease;
-}
-
-.pdf-link:hover {
-  background: var(--sage);
-  text-decoration: none;
 }
 
 .sources {

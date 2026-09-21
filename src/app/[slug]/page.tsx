@@ -12,8 +12,10 @@ import {
 } from "@/lib/queries";
 import { getSessionUser } from "@/lib/auth";
 import { youtubeVideoId } from "@/lib/youtube";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatEntryNumber } from "@/lib/format";
 import CommentForm from "@/app/CommentForm";
+import CopyLinkButton from "@/app/CopyLinkButton";
+import EntrySocialLinks from "@/app/EntrySocialLinks";
 import SaveButton from "@/app/SaveButton";
 import VideoEmbed from "@/app/VideoEmbed";
 import SyllabusShell from "@/app/syllabus/SyllabusShell";
@@ -48,39 +50,70 @@ export default async function EntryPage({
         ← The Archive
       </Link>
 
-      <header className="entry-header">
-        <div className="row-meta mono">
-          {entry.entry_number != null && <span>No. {entry.entry_number}</span>}
-          {entry.published_at && <span>{formatDate(entry.published_at)}</span>}
-        </div>
-        <div className="entry-title-row">
-          <h1 className="entry-title">{entry.title}</h1>
-          <SaveButton
-            entryId={entry.id}
-            slug={entry.slug}
-            signedIn={Boolean(user)}
-            initialSaved={saved}
-            variant="inline"
-          />
-        </div>
-      </header>
+      <div className="entry-hero">
+        <div className="entry-hero-main">
+          <div className="entry-hero-label mono">
+            {entry.entry_number != null && (
+              <span>Archive {formatEntryNumber(entry.entry_number)}</span>
+            )}
+            {entry.published_at && (
+              <span className="entry-hero-date">
+                {formatDate(entry.published_at)}
+              </span>
+            )}
+          </div>
 
-      {videoId && (
-        <div className="video-wrap">
-          <VideoEmbed url={entry.youtube_url} title={entry.title} />
-        </div>
-      )}
+          <div className="entry-hero-title-row">
+            <h1 className="entry-hero-title">{entry.title}</h1>
+            <SaveButton
+              entryId={entry.id}
+              slug={entry.slug}
+              signedIn={Boolean(user)}
+              initialSaved={saved}
+              variant="inline"
+            />
+          </div>
 
-      {entry.pdf_url && (
-        <a
-          className="pdf-link"
-          href={entry.pdf_url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Download PDF
-        </a>
-      )}
+          {entry.summary && (
+            <p className="entry-hero-quote">&ldquo;{entry.summary}&rdquo;</p>
+          )}
+
+          <div className="entry-hero-ctas">
+            {entry.pdf_url && (
+              <div className="entry-cta-row">
+                <span className="entry-cta-label mono">
+                  Get the printable guide
+                </span>
+                <a
+                  className="entry-cta-button entry-cta-button--primary"
+                  href={entry.pdf_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download Free
+                </a>
+              </div>
+            )}
+
+            <div className="entry-cta-row">
+              <span className="entry-cta-label mono">Share this page</span>
+              <CopyLinkButton />
+            </div>
+          </div>
+        </div>
+
+        <div className="entry-hero-media">
+          {videoId && (
+            <div className="entry-video-frame">
+              <div className="video-wrap">
+                <VideoEmbed url={entry.youtube_url} title={entry.title} />
+              </div>
+            </div>
+          )}
+
+          <EntrySocialLinks entry={entry} />
+        </div>
+      </div>
 
       {entry.body && (
         <div className="prose">

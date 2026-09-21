@@ -4,6 +4,7 @@ export type Entry = {
   entry_number: number | null;
   title: string;
   body: string | null;
+  summary: string | null;
   youtube_url: string | null;
   pdf_url: string | null;
   sources: string[] | null;
@@ -11,6 +12,12 @@ export type Entry = {
   published_at: string | null;
   created_at: string;
   category: string | null;
+  instagram_url: string | null;
+  facebook_url: string | null;
+  tiktok_url: string | null;
+  linkedin_url: string | null;
+  x_url: string | null;
+  threads_url: string | null;
 };
 
 export type Book = {
