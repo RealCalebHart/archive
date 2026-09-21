@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CountdownTimer from "./CountdownTimer";
 import EntryCard from "./EntryCard";
+import EntryScroll from "./EntryScroll";
 import VideoEmbed from "./VideoEmbed";
 import {
   HOMEPAGE_VIDEO_URL,
@@ -126,7 +127,7 @@ export default async function HomePage() {
             Published entries will appear here.
           </div>
         ) : (
-          <div className="entry-scroll">
+          <EntryScroll>
             {entries.map((entry) => (
               <EntryCard
                 key={entry.id}
@@ -135,7 +136,7 @@ export default async function HomePage() {
                 saved={savedIds.has(entry.id)}
               />
             ))}
-          </div>
+          </EntryScroll>
         )}
       </section>
 

@@ -649,12 +649,47 @@ hr {
   margin: 0 0 1.25rem;
 }
 
+.entry-scroll-wrap {
+  position: relative;
+}
+
 .entry-scroll {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
   scroll-snap-type: x proximity;
   padding-bottom: 0.75rem;
+}
+
+.entry-scroll-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0.75rem;
+  width: 72px;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.entry-scroll-fade.is-hidden {
+  opacity: 0;
+}
+
+.entry-scroll-fade--left {
+  left: 0;
+  background: linear-gradient(to right, var(--void), transparent);
+  mask-image: linear-gradient(to right, black, transparent);
+  -webkit-mask-image: linear-gradient(to right, black, transparent);
+}
+
+.entry-scroll-fade--right {
+  right: 0;
+  background: linear-gradient(to left, var(--void), transparent);
+  mask-image: linear-gradient(to left, black, transparent);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
 }
 
 .entry-scroll::-webkit-scrollbar {
