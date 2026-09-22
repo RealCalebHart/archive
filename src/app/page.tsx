@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import CategoryGrid from "./CategoryGrid";
 import CountdownTimer from "./CountdownTimer";
 import EntryCard from "./EntryCard";
 import EntryScroll from "./EntryScroll";
@@ -18,12 +18,15 @@ import { youtubeVideoId } from "@/lib/youtube";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [entries, stats, categories, user] = await Promise.all([
+  const [entries, stats, allCategories, user] = await Promise.all([
     getPublishedEntries(),
     getStats(),
     getCategoryPills(),
     getSessionUser(),
   ]);
+  const categories = allCategories.filter(
+    (category) => category.slug !== "start-here",
+  );
   const savedIds = user ? await getSavedEntryIds(user.id) : new Set<string>();
 
   const heroVideoId = youtubeVideoId(HOMEPAGE_VIDEO_URL);
@@ -149,21 +152,7 @@ export default async function HomePage() {
             Categories will appear here once the syllabus is set up.
           </div>
         ) : (
-          <div className="category-pills">
-            {categories.map((category) => (
-              <Link
-                key={category.slug}
-                href={`/category/${encodeURIComponent(category.slug)}`}
-                className={
-                  category.entryCount === 0
-                    ? "category-pill category-pill--empty"
-                    : "category-pill"
-                }
-              >
-                {category.title}
-              </Link>
-            ))}
-          </div>
+          <CategoryGrid categories={categories} />
         )}
       </section>
     </main>

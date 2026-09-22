@@ -765,37 +765,153 @@ hr {
   margin: 0 0 3rem;
 }
 
-.category-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.1rem;
 }
 
-.category-pill {
-  display: inline-block;
-  font-family: var(--font-mono-stack);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  color: var(--parchment);
+.category-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--cell-radius);
+  overflow: hidden;
   background: var(--cell-fill);
   border: 1px solid var(--cell-outline);
-  border-radius: 999px;
-  padding: 0.55rem 1.1rem;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  color: var(--parchment);
+  isolation: isolate;
+  transform: translateY(0) scale(1);
+  transition: transform 0.35s cubic-bezier(0.16, 0.84, 0.24, 1),
+    border-color 0.3s ease, box-shadow 0.35s ease;
 }
 
-.category-pill:hover {
-  color: var(--sage);
+.category-card:hover,
+.category-card:focus-visible {
+  transform: translateY(-6px) scale(1.015);
   border-color: var(--sage);
+  box-shadow: 0 18px 40px -12px rgba(74, 124, 89, 0.45),
+    0 0 0 1px rgba(107, 168, 122, 0.35);
   text-decoration: none;
 }
 
-.category-pill--empty {
-  opacity: 0.45;
+.category-card-media {
+  position: absolute;
+  inset: 0;
 }
 
-.category-pill--empty:hover {
-  opacity: 0.7;
+.category-card-img {
+  object-fit: cover;
+  filter: saturate(1) brightness(0.9);
+  transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.24, 1),
+    filter 0.4s ease;
+}
+
+.category-card:hover .category-card-img,
+.category-card:focus-visible .category-card-img {
+  transform: scale(1.09);
+  filter: saturate(1.15) brightness(1);
+}
+
+.category-card-shine {
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(245, 243, 238, 0.16) 50%,
+    transparent 58%
+  );
+  transform: translateX(-60%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.category-card:hover .category-card-shine,
+.category-card:focus-visible .category-card-shine {
+  transform: translateX(60%);
+}
+
+.category-card-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, var(--cell-fill), var(--charcoal));
+}
+
+.category-card-title {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1rem 1.15rem;
+  font-family: var(--font-mono-stack);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s ease, transform 0.35s ease;
+}
+
+.category-card:hover .category-card-title,
+.category-card:focus-visible .category-card-title {
+  color: var(--sage);
+  transform: translateY(-2px);
+}
+
+.category-card--empty {
+  opacity: 0.55;
+}
+
+.category-card--empty:hover {
+  opacity: 0.85;
+}
+
+/* Full-screen click flourish: a green burst expands from the click point
+   while the current page is still mounted, then the route swap happens. */
+.category-burst {
+  position: fixed;
+  top: var(--burst-y);
+  left: var(--burst-x);
+  width: 6vmax;
+  height: 6vmax;
+  margin: -3vmax 0 0 -3vmax;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(107, 168, 122, 0.85) 0%,
+    rgba(74, 124, 89, 0.5) 45%,
+    rgba(74, 124, 89, 0) 72%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 999;
+  transform: scale(0);
+  animation: category-burst 0.55s cubic-bezier(0.16, 0.84, 0.24, 1) forwards;
+}
+
+@keyframes category-burst {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(60);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-card,
+  .category-card-img,
+  .category-card-veil,
+  .category-card-shine,
+  .category-card-title {
+    transition: none;
+  }
 }
 
 /* ---------- Empty state ---------- */
