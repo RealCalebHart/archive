@@ -170,7 +170,7 @@ export default async function HomePage() {
             rel="noopener noreferrer"
             className="entry-cta-button entry-cta-button--primary subscribe-button"
           >
-            Subscribe
+            <span className="subscribe-button-label">Subscribe</span>
           </a>
         </div>
       </section>
