@@ -1,19 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import type { CategoryPill } from "@/lib/syllabus";
-
-// Maps a top-level syllabus slug to its cover image. A category without an
-// entry here falls back to a plain text card so newly-added syllabus
-// sections don't silently disappear from the homepage while waiting on art.
-const COVERS: Record<string, string> = {
-  "Foundations-microeconomics": "/archive/category-covers/economics.png",
-  "financial-accounting": "/archive/category-covers/financial-accounting.png",
-  "business-law": "/archive/category-covers/business-law.png",
-  "business-statistics": "/archive/category-covers/business-statistics.png",
-};
 
 const TRANSITION_MS = 520;
 
@@ -48,40 +37,40 @@ export default function CategoryGrid({
   return (
     <>
       <div className="category-grid">
-        {categories.map((category) => {
-          const cover = COVERS[category.slug];
-          return (
-            <a
-              key={category.slug}
-              href={`/category/${encodeURIComponent(category.slug)}`}
-              onClick={(e) => handleClick(e, category.slug)}
-              className={
-                category.entryCount === 0
-                  ? "category-card category-card--empty"
-                  : "category-card"
-              }
-            >
-              {cover ? (
-                <span className="category-card-media">
-                  <Image
-                    src={cover}
-                    alt={category.title}
-                    fill
-                    sizes="(max-width: 640px) 50vw, 280px"
-                    className="category-card-img"
-                    unoptimized
-                  />
-                  <span className="category-card-shine" aria-hidden="true" />
-                </span>
-              ) : (
-                <>
-                  <span className="category-card-fallback" aria-hidden="true" />
-                  <span className="category-card-title">{category.title}</span>
-                </>
-              )}
-            </a>
-          );
-        })}
+        {categories.map((category) => (
+          <a
+            key={category.slug}
+            href={`/category/${encodeURIComponent(category.slug)}`}
+            onClick={(e) => handleClick(e, category.slug)}
+            className={
+              category.entryCount === 0
+                ? "category-card category-card--empty"
+                : "category-card"
+            }
+          >
+            <span className="category-card-icon" aria-hidden="true">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m12 3 9 5-9 5-9-5 9-5Z" />
+                <path d="m3 12 9 5 9-5" />
+                <path d="m3 17 9 5 9-5" />
+              </svg>
+            </span>
+            <span className="category-card-title">{category.title}</span>
+            <span className="category-card-count mono">
+              {category.entryCount}{" "}
+              {category.entryCount === 1 ? "entry" : "entries"}
+            </span>
+          </a>
+        ))}
       </div>
 
       {burst && (
