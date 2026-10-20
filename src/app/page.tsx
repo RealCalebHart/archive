@@ -170,6 +170,27 @@ export default async function HomePage() {
             rel="noopener noreferrer"
             className="entry-cta-button entry-cta-button--primary subscribe-button"
           >
+            <svg
+              className="subscribe-button-ring"
+              aria-hidden="true"
+              viewBox="0 0 160 46"
+              preserveAspectRatio="none"
+            >
+              <rect
+                className="subscribe-button-ring-shape"
+                x="3"
+                y="3"
+                width="154"
+                height="40"
+                rx="20"
+                ry="20"
+                pathLength="100"
+                fill="none"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeDasharray="24 26 24 26"
+              />
+            </svg>
             <span className="subscribe-button-label">Subscribe</span>
           </a>
         </div>
