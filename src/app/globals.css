@@ -914,68 +914,15 @@ hr {
 }
 
 .subscribe-button {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
   padding: 0.85rem 2rem;
   font-size: 0.75rem;
 }
 
-/* Stage 1: background and text swap to white at the same rate the
-   button's color already transitions (inherited from .entry-cta-button's
-   "background/border-color/color 0.15s ease"). */
 .entry-cta-button--primary.subscribe-button:hover,
 .entry-cta-button--primary.subscribe-button:focus-visible {
   background: var(--parchment);
   color: var(--void);
   border-color: var(--parchment);
-}
-
-.subscribe-button-label {
-  position: relative;
-  z-index: 1;
-}
-
-/* A soft green glow traces the button's outer edge in two arcs on
-   opposite sides (each ~24% of the perimeter) that slowly rotate around
-   it the whole time it's hovered. Drawn as an SVG stroke with
-   pathLength="100" so the dash/gap lengths are even along the actual
-   rounded-pill perimeter — a conic-gradient's angle sectors don't map to
-   even arc-length on a wide, non-square pill, which is what made an
-   earlier version look like it collapsed into a single smear. */
-.subscribe-button-ring {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  filter: blur(2.5px);
-  pointer-events: none;
-  transform-origin: center;
-  transition: opacity 0.2s ease;
-}
-
-.subscribe-button-ring-shape {
-  stroke: var(--sage);
-}
-
-.subscribe-button:hover .subscribe-button-ring,
-.subscribe-button:focus-visible .subscribe-button-ring {
-  opacity: 1;
-  animation: subscribe-ring-rotate 7s linear infinite;
-}
-
-@keyframes subscribe-ring-rotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .subscribe-button-ring {
-    transition: none;
-    animation: none;
-  }
 }
 
 /* ---------- Empty state ---------- */
