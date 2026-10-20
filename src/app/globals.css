@@ -913,9 +913,16 @@ hr {
   color: var(--muted);
 }
 
-.subscribe-button {
+.entry-cta-button.subscribe-button {
   padding: 0.85rem 2rem;
   font-size: 0.75rem;
+}
+
+@media (min-width: 761px) {
+  .entry-cta-button.subscribe-button {
+    padding-left: 3.25rem;
+    padding-right: 3.25rem;
+  }
 }
 
 .entry-cta-button--primary.subscribe-button:hover,
