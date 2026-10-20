@@ -886,6 +886,39 @@ hr {
   }
 }
 
+/* ---------- Subscribe CTA (homepage footer) ---------- */
+.subscribe-section {
+  margin: 0 0 3rem;
+}
+
+.subscribe-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  background: var(--cell-fill);
+  border: 1px solid var(--cell-outline);
+  border-radius: var(--cell-radius);
+  padding: 3rem 1.5rem;
+}
+
+.subscribe-heading {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.subscribe-desc {
+  max-width: 32rem;
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+}
+
+.subscribe-button {
+  padding: 0.85rem 2rem;
+  font-size: 0.75rem;
+}
+
 /* ---------- Empty state ---------- */
 .empty {
   border: 1px dashed var(--line-strong);

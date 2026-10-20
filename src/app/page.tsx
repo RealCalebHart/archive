@@ -155,6 +155,25 @@ export default async function HomePage() {
           <CategoryGrid categories={categories} />
         )}
       </section>
+
+      <section className="subscribe-section" aria-label="Subscribe">
+        <div className="subscribe-box">
+          <span className="mono">Stay in the loop</span>
+          <h2 className="subscribe-heading">Subscribe to the Newsletter</h2>
+          <p className="subscribe-desc">
+            Get only the best lessons, condensed into one short email,
+            straight to your inbox.
+          </p>
+          <a
+            href={SUBSTACK_SUBSCRIBE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="entry-cta-button entry-cta-button--primary subscribe-button"
+          >
+            Subscribe
+          </a>
+        </div>
+      </section>
     </main>
   );
 }
